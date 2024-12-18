@@ -58,6 +58,12 @@ io.on("connection", (socket) => {
     const { sessionId, action } = data;
     io.to(sessionId).emit("perform-action", action);
   });
+  socket.on("scan-qr", (data) => {
+    console.log("QR code scanned:", data);
+    alert('testMessage');
+    // Perform an action, e.g., broadcast to other clients or a specific room
+    io.emit("qr-scanned", { message: "QR code scanned successfully", data });
+  });
 });
 
 const PORT = process.env.PORT || 3000;
