@@ -38,20 +38,18 @@ app.get("/generateBasketballCodeMulti", async (req, res) => {
 io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);
 
-  // Join session
   socket.on("join-session", (sessionId) => {
     socket.join(sessionId);
     console.log(`Socket ${socket.id} joined session ${sessionId}`);
   });
 
-  // Handle QR scan
+
   socket.on("scan-qr", (data) => {
     const { sessionId } = data;
     console.log(`QR code scanned for session ${sessionId}`);
     io.to(sessionId).emit("qr-scanned", { message: "QR code scanned successfully" });
   });
 
-  // Handle control actions
   socket.on("control", (data) => {
     const { sessionId, action } = data;
     console.log(`Action: ${action} for session: ${sessionId}`);
