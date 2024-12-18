@@ -23,18 +23,6 @@ const io = require("socket.io")(httpServer, {
 
 app.use(express.static("public"));
 
-// app.get("/generateWheelCodeMulti", async (req, res) => {
-//   const sessionId = uuidv4();
-//   const urlSession = `https://dev.ekcs.co/FED/QRBasedControlAd/wheel/phoneControl/index.html?sessionId=${sessionId}`;
-
-//   try {
-//     const qrCode = await QrCode.toDataURL(urlSession);
-//     res.send({ qrCode, sessionId });
-//   } catch (err) {
-//     res.status(500).send("Generating QR code Error");
-//   }
-// });
-
 app.get("/generateBasketballCodeMulti", async (req, res) => {
   const sessionId = uuidv4();
   const urlSession = `https://dev.ekcs.co/FED/QRBasedControlAd/multiple_QR_Control/phoneBasketball/index.html?sessionId=${sessionId}`;
@@ -48,19 +36,26 @@ app.get("/generateBasketballCodeMulti", async (req, res) => {
 });
 
 io.on("connection", (socket) => {
-  console.log("Client :", socket.id);
+  console.log("Client connected:", socket.id);
 
+  // Join session
   socket.on("join-session", (sessionId) => {
     socket.join(sessionId);
     console.log(`Socket ${socket.id} joined session ${sessionId}`);
   });
+
+  // Handle QR scan
+  socket.on("scan-qr", (data) => {
+    const { sessionId } = data;
+    console.log(`QR code scanned for session ${sessionId}`);
+    io.to(sessionId).emit("qr-scanned", { message: "QR code scanned successfully" });
+  });
+
+  // Handle control actions
   socket.on("control", (data) => {
     const { sessionId, action } = data;
+    console.log(`Action: ${action} for session: ${sessionId}`);
     io.to(sessionId).emit("perform-action", action);
-  });
-  socket.on("scan-qr", (data) => {
-    console.log("QR code scanned:", data);
-    io.to(data.sessionId).emit("qr-scanned", { message: "QR code scanned successfully" });
   });
 });
 
