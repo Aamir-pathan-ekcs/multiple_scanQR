@@ -37,7 +37,7 @@ app.use(express.static("public"));
 
 app.get("/generateBasketballCodeMulti", async (req, res) => {
   const sessionId = uuidv4();
-  const urlSession = `https://dev.ekcs.co/FED/QRBasedControlAd/multiple_QR_Control/basketball/index.html?sessionId=${sessionId}`;
+  const urlSession = `https://dev.ekcs.co/FED/QRBasedControlAd/multiple_QR_Control/phoneBasketball/index.html?sessionId=${sessionId}`;
 
   try {
     const qrCode = await QrCode.toDataURL(urlSession);
