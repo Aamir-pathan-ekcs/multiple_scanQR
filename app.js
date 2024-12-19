@@ -26,10 +26,10 @@ app.use(express.static("public"));
 app.get("/generateBasketballCodeMulti", async (req, res) => {
   const sessionId = uuidv4();
   const urlSession = `https://dev.ekcs.co/FED/QRBasedControlAd/multiple_QR_Control/phoneBasketball/index.html?sessionId=${sessionId}`;
-
+ const eventType = "qr1";
   try {
     const qrCode = await QrCode.toDataURL(urlSession);
-    res.send({ qrCode, sessionId });
+    res.send({ qrCode, sessionId, eventType });
   } catch (err) {
     res.status(500).send("Generating QR code Error");
   }
@@ -38,10 +38,10 @@ app.get("/generateBasketballCodeMulti", async (req, res) => {
 app.get("/generateSpinWheelCodeMulti", async (req, res) => {
   const sessionId = uuidv4();
   const urlSession = `https://dev.ekcs.co/FED/QRBasedControlAd/multiple_QR_Control/phoneSpinWheel/index.html?sessionId=${sessionId}`;
-
+  const eventType = "qr2";
   try {
     const qrCode = await QrCode.toDataURL(urlSession);
-    res.send({ qrCode, sessionId });
+    res.send({ qrCode, sessionId, eventType});
   } catch (err) {
     res.status(500).send("Generating QR code Error");
   }
@@ -60,11 +60,11 @@ io.on("connection", (socket) => {
     console.log('firstt  ttt  qr type not found');
     const { sessionId , eventType } = data;
     console.log(`QR code scanned for session ${sessionId}, Event-type: ${eventType}`);
-    if(!eventType === 'qr1'){
-      console.log('qr type not found');
+    if(eventType === 'qr1'){
+      console.log('qr type is found');
     }
-    io.to(sessionId).emit("qr-scanned", { message: "QR code scanned successfully" });
-    io.to(sessionId).emit("qr-scannedT", { message: "QR code scanned successfully 2" });
+    // io.to(sessionId).emit("qr-scanned", { message: "QR code scanned successfully" });
+    // io.to(sessionId).emit("qr-scannedT", { message: "QR code scanned successfully 2" });
   });
 
   socket.on("control", (data) => {
