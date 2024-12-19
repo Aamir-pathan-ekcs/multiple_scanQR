@@ -57,8 +57,9 @@ io.on("connection", (socket) => {
 
 
   socket.on("scan-qr", (data) => {
+    console.log(data);
     const { sessionId, eventType } = data || {};
-  
+    console.log("gwtting eventType");
     if (!eventType) {
       console.log("Missing eventType");
       return;
