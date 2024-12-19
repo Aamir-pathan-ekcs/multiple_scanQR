@@ -60,7 +60,7 @@ io.on("connection", (socket) => {
     console.log('firstt  ttt  qr type not found');
     const { sessionId , eventType } = data;
     console.log(`QR code scanned for session ${sessionId}, Event-type: ${eventType}`);
-    if(eventType === 'qr1'){
+    if(!eventType === 'qr1'){
       console.log('qr type not found');
     }
     io.to(sessionId).emit("qr-scanned", { message: "QR code scanned successfully" });
