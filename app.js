@@ -46,7 +46,7 @@ app.get("/generateSpinWheelCodeMulti", async (req, res) => {
     res.status(500).send("Generating QR code Error");
   }
 });
-
+const activeSessions = {};
 io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);
 
