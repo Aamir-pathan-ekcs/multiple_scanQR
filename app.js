@@ -53,30 +53,31 @@ io.on("connection", (socket) => {
   socket.on("join-session", ({ eventType, sessionId }) => {
     console.log(`Received join-session for session ${sessionId} with eventType ${eventType}`);
     socket.join(sessionId);
-    if (eventType === 'qr1') {
-      io.to(sessionId).emit("qr-scanned", { message: "QR code scanned successfully" });
-    } else if (eventType === 'qr2') {
-      io.to(sessionId).emit("qr-scannedT", { message: "QR code scanned successfully 2" });
-    } else {
-      console.log("Unknown eventType:", eventType);
-    }
+    activeSessions[sessionId] = { eventType };
   });
 
 
   socket.on("scan-qr", (data = {}) => {
-    setTimeout(()=>{
     console.log('we are data is fetching');
     console.log(data);
-    const { eventType, sessionId } = data;
-    console.log(`QR code scanned for session ${sessionId}, Event-type: ${eventType}`);
-    if (eventType === 'qr1') {
-      io.to(sessionId).emit("qr-scanned", { message: "QR code scanned successfully" });
-    } else if (eventType === 'qr2') {
-      io.to(sessionId).emit("qr-scannedT", { message: "QR code scanned successfully 2" });
+    const { sessionId } = data;
+    const session = activeSessions[sessionId];
+
+    // Check if eventType exists for the session
+    if (session && session.eventType) {
+      const { eventType } = session; // Retrieve stored eventType from activeSessions
+      console.log(`QR code scanned for session ${sessionId}, Event-type: ${eventType}`);
+
+      if (eventType === 'qr1') {
+        io.to(sessionId).emit("qr-scanned", { message: "QR code scanned successfully" });
+      } else if (eventType === 'qr2') {
+        io.to(sessionId).emit("qr-scannedT", { message: "QR code scanned successfully 2" });
+      } else {
+        console.log("Unknown eventType:", eventType);
+      }
     } else {
-      console.log("Unknown eventType:", eventType);
+      console.log(`No eventType found for session ${sessionId}`);
     }
-  },2000)
   });
 
   socket.on("control", (data) => {
