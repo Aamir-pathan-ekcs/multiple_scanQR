@@ -57,6 +57,7 @@ io.on("connection", (socket) => {
 
 
   socket.on("scan-qr", (data = {}) => {
+    console.log('we are data is fetching');
     console.log(data);
     const { eventType, sessionId } = data;
     console.log(`QR code scanned for session ${sessionId}, Event-type: ${eventType}`);
