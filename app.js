@@ -60,6 +60,7 @@ io.on("connection", (socket) => {
     const { sessionId } = data;
     console.log(`QR code scanned for session ${sessionId}`);
     io.to(sessionId).emit("qr-scanned", { message: "QR code scanned successfully" });
+    io.to(sessionId).emit("qr-scannedT", { message: "QR code scanned successfully 2" });
   });
 
   socket.on("control", (data) => {
