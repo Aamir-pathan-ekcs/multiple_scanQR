@@ -68,7 +68,7 @@ io.on("connection", (socket) => {
       if (eventType === 'qr1') {
         io.to(sessionId).emit("qr-scanned", { message: "QR code scanned successfully" });
       } else if (eventType === 'qr2') {
-        io.to(sessionId).emit("qr-scannedT", { message: "QR code scanned successfully 2" });
+        io.to(sessionId).emit("qr-scannedT", { message: "QR code scanned successfully" });
       } else {
         console.log("Unknown eventType:", eventType);
       }
