@@ -58,14 +58,11 @@ io.on("connection", (socket) => {
 
 
   socket.on("scan-qr", (data = {}) => {
-    console.log('we are data is fetching');
-    console.log(data);
     const { sessionId } = data;
     const session = activeSessions[sessionId];
 
-    // Check if eventType exists for the session
     if (session && session.eventType) {
-      const { eventType } = session; // Retrieve stored eventType from activeSessions
+      const { eventType } = session;
       console.log(`QR code scanned for session ${sessionId}, Event-type: ${eventType}`);
 
       if (eventType === 'qr1') {
