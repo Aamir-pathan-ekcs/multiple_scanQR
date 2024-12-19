@@ -29,7 +29,7 @@ app.get("/generateBasketballCodeMulti", async (req, res) => {
  const eventType = "qr1";
   try {
     const qrCode = await QrCode.toDataURL(urlSession);
-    res.send({ qrCode, sessionId, eventType });
+    res.send({ qrCode, eventType, sessionId });
   } catch (err) {
     res.status(500).send("Generating QR code Error");
   }
@@ -41,7 +41,7 @@ app.get("/generateSpinWheelCodeMulti", async (req, res) => {
   const eventType = "qr2";
   try {
     const qrCode = await QrCode.toDataURL(urlSession);
-    res.send({ qrCode, sessionId, eventType});
+    res.send({ qrCode, eventType, sessionId});
   } catch (err) {
     res.status(500).send("Generating QR code Error");
   }
@@ -57,14 +57,15 @@ io.on("connection", (socket) => {
 
 
   socket.on("scan-qr", (data) => {
-    console.log('firstt  ttt  qr type not found');
     const { sessionId , eventType } = data;
     console.log(`QR code scanned for session ${sessionId}, Event-type: ${eventType}`);
-    if(eventType === 'qr1'){
-      console.log('qr type is found');
+    if (eventType === 'qr1') {
+      io.to(sessionId).emit("qr-scanned", { message: "QR code scanned successfully" });
+    } else if (eventType === 'qr2') {
+      io.to(sessionId).emit("qr-scannedT", { message: "QR code scanned successfully 2" });
+    } else {
+      console.log("Unknown eventType:", eventType);
     }
-    // io.to(sessionId).emit("qr-scanned", { message: "QR code scanned successfully" });
-    // io.to(sessionId).emit("qr-scannedT", { message: "QR code scanned successfully 2" });
   });
 
   socket.on("control", (data) => {
