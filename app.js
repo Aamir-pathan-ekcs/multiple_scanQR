@@ -51,8 +51,8 @@ io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);
 
   socket.on("join-session", ({ eventType, sessionId }) => {
+    console.log(`Received join-session for session ${sessionId} with eventType ${eventType}`);
     socket.join(sessionId);
-    console.log(`Socket ${socket.id} joined session ${sessionId}`);
   });
 
 
