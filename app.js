@@ -35,6 +35,18 @@ app.get("/generateBasketballCodeMulti", async (req, res) => {
   }
 });
 
+app.get("/generateSpinWheelCodeMulti", async (req, res) => {
+  const sessionId = uuidv4();
+  const urlSession = `https://dev.ekcs.co/FED/QRBasedControlAd/multiple_QR_Control/phoneSpinWheel/index.html?sessionId=${sessionId}`;
+
+  try {
+    const qrCode = await QrCode.toDataURL(urlSession);
+    res.send({ qrCode, sessionId });
+  } catch (err) {
+    res.status(500).send("Generating QR code Error");
+  }
+});
+
 io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);
 
