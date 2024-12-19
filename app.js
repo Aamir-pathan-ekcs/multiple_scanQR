@@ -57,10 +57,17 @@ io.on("connection", (socket) => {
 
 
   socket.on("scan-qr", (data) => {
-    const { sessionId } = data;
-    console.log(`QR code scanned for session ${sessionId}`);
-    io.to(sessionId).emit("qr-scanned", { message: "QR code scanned successfully" });
-    io.to(sessionId).emit("qr-scannedT", { message: "QR code scanned successfully 2" });
+    const { sessionId , eventType } = data;
+    console.log(`QR code scanned for session ${sessionId}, Event-type: ${eventType}`);
+    if(!eventType) {
+      console.log('missing event');
+      return
+    }
+    if(eventType === 'qr1'){
+      io.to(sessionId).emit("qr-scanned", { message: "QR code 1 scanned successfully" });
+    } else if(eventType === 'qr2') {
+      io.to(sessionId).emit("qr-scannedT", { message: "QR code 2 scanned successfully" });
+      }
   });
 
   socket.on("control", (data) => {
