@@ -58,22 +58,32 @@ io.on("connection", (socket) => {
 
   socket.on("scan-qr", (data) => {
     console.log(data);
-    const { sessionId, eventType } = data || {};
-    console.log("gwtting eventType");
+  
+    // Make sure data is defined and an object
+    if (!data) {
+      console.log("Missing data object");
+      return;
+    }
+  
+    const { sessionId, eventType } = data;
+  
+    console.log("getting eventType");
+  
+    // Check if eventType exists
     if (!eventType) {
       console.log("Missing eventType");
       return;
     }
   
+    // Handling specific event types
     if (eventType === "qr1") {
       io.to(sessionId).emit("qr-scanned", { message: "QR code 1 scanned successfully" });
     } else if (eventType === "qr2") {
-      io.to(sessionId).emit("qr-scannedT", { message: "QR code 2 scanned successfully" });
+      io.to(sessionId).emit("qr-scanned", { message: "QR code 2 scanned successfully" });
     } else {
       console.log("Unknown eventType");
     }
   });
-
   socket.on("control", (data) => {
     const { sessionId, action } = data;
     console.log(`Action: ${action} for session: ${sessionId}`);
