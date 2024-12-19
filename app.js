@@ -53,6 +53,13 @@ io.on("connection", (socket) => {
   socket.on("join-session", ({ eventType, sessionId }) => {
     console.log(`Received join-session for session ${sessionId} with eventType ${eventType}`);
     socket.join(sessionId);
+    if (eventType === 'qr1') {
+      io.to(sessionId).emit("qr-scanned", { message: "QR code scanned successfully" });
+    } else if (eventType === 'qr2') {
+      io.to(sessionId).emit("qr-scannedT", { message: "QR code scanned successfully 2" });
+    } else {
+      console.log("Unknown eventType:", eventType);
+    }
   });
 
 
