@@ -57,6 +57,7 @@ io.on("connection", (socket) => {
 
 
   socket.on("scan-qr", (data = {}) => {
+    setTimeout(()=>{
     console.log('we are data is fetching');
     console.log(data);
     const { eventType, sessionId } = data;
@@ -68,6 +69,7 @@ io.on("connection", (socket) => {
     } else {
       console.log("Unknown eventType:", eventType);
     }
+  },2000)
   });
 
   socket.on("control", (data) => {
